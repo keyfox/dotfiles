@@ -1,0 +1,88 @@
+" Automated vim-plug installation
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'blueshirts/darcula'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'othree/yajs', { 'for': 'javascript' }
+call plug#end()
+
+augroup TransparentBG
+	autocmd!
+  autocmd ColorScheme * highlight Normal ctermbg=none
+ 	autocmd ColorScheme * highlight NonText ctermbg=none
+	autocmd ColorScheme * highlight LineNr ctermbg=none
+	autocmd ColorScheme * highlight Folded ctermbg=none
+	autocmd ColorScheme * highlight EndOfBuffer ctermbg=none
+augroup END
+
+set background=dark
+colorscheme darcula
+
+" show information of file being edited in title bar
+set title
+
+" encoding used inside vim
+set encoding=utf-8
+
+set laststatus=2
+
+" show line numbers
+set number
+" show ruler (index of row and column)
+set ruler
+
+" highlight line which cursor is on
+set cursorline
+" highlight a pair of parenthesises
+set showmatch
+
+" how many lines should be visible above/below cursor
+set scrolloff=4
+" how many characters in a line should be visible before/after cursor
+set sidescrolloff=12
+" how many characters will be scrolled at a time
+set sidescroll=8
+
+" allow to show another file editing a file
+set hidden
+
+set incsearch     " start searching on type
+set hlsearch      " highlight matches when searching
+set ignorecase    " case-insensitive search
+set smartcase     " do case-sensitive search once capitalized character has been typed
+
+set splitright    " open a file on right side in :vs
+set splitbelow    " open a file on bottom side in :sp
+
+set wrapscan      " restart search from the beginning of file if needed
+
+set smarttab
+set autoindent
+set smartindent
+
+" expand tab to multiple spaces
+set expandtab
+" how many spaces does a tab space contain?
+set tabstop=2
+" how many spaces should be inserted when TAB key pressed?
+set softtabstop=2
+" how many spaces should be inserted when newline inserted?
+set shiftwidth=2
+
+" never emit bell sounds
+set visualbell t_vb=
+
+autocmd FileType * setlocal formatoptions-=c formatoptions -=r formatoptions-=o
+
+set backspace=indent,eol,start
+
+set mouse=a
+set ttymouse=xterm2
+

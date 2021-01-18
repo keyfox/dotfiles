@@ -1,0 +1,15 @@
+#!/bin/bash
+
+for src in $(find $HOME/.dotfiles/locals -type f); do
+  rel=`realpath --relative-to=$HOME/.dotfiles/locals $src`
+  dst=$HOME/$rel
+  parent=${dst%/*}
+  if [ -f $dst ]; then
+    if [ $src -nt $dst ]; then
+      echo "dotfiles: $dst might be outdated"
+    fi
+  else
+    mkdir -p $parent
+    cp $src $dst
+  fi
+done

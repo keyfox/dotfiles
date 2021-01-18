@@ -1,0 +1,3 @@
+# Backspace key
+stty erase 
+
