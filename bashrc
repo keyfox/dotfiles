@@ -143,7 +143,8 @@ fi
 # LOAD EXTERNAL CONFIGURATIONS
 #===============================================================================
 
-[ -f ~/.bashrc.local.d/pre.bashrc ] && source ~/.bashrc.local.d/pre.bashrc
-for f in ~/.bashrc.d/*.bashrc; do source $f; done
-[ -f ~/.bashrc.local.d/post.bashrc ] && source ~/.bashrc.local.d/post.bashrc
+# Use `find` instead of iterating by path because .bashrc might not exist
+for f in `find ~/.bashrc.local.d/pre/ -name '*.bashrc'`; do source $f; done
+for f in `find ~/.bashrc.d/ -name '*.bashrc'`; do source $f; done
+for f in `find ~/.bashrc.local.d/post/ -name '*.bashrc'`; do source $f; done
 
