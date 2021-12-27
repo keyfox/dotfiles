@@ -10,5 +10,5 @@ HOSTNAME_FG_COLORS = {
 HOSTNAME_FG_FALLBACK = DefaultColor.HOSTNAME_FG
 
 class Color(DefaultColor):
-    HOSTNAME_FG = HOSTNAME_FG_COLORS.get(gethostname(), HOSTNAME_FG_FALLBACK)
+    HOSTNAME_FG = HOSTNAME_FG_COLORS.get(gethostname().split(".")[0], HOSTNAME_FG_FALLBACK)
 
