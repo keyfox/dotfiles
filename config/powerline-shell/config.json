@@ -3,7 +3,10 @@
     "newline",
     "set_term_title",
     "virtual_env",
-    "username",
+    {
+      "type": "stdout",
+      "command": ["echo", "🦊"]
+    },
     "hostname",
     "ssh",
     "cwd",
