@@ -10,5 +10,6 @@
     "hg",
     "jobs",
     "root"
-  ]
+  ],
+  "theme": "~/.config/powerline-shell/keyfox-theme.py"
 }
