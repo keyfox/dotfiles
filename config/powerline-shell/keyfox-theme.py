@@ -5,7 +5,7 @@ HOSTNAME_FG_COLORS = {
     "nebula": 160,
     "yamabuki": 178,
     "GGEAR2018": 45,
-    "pixen": 197,
+    "pixen": 162,
 }
 HOSTNAME_FG_FALLBACK = DefaultColor.HOSTNAME_FG
 
