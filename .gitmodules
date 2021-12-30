@@ -1,0 +1,3 @@
+[submodule "powerline-install"]
+	path = powerline-install
+	url = https://github.com/powerline/powerline
