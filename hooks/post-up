@@ -13,3 +13,9 @@ for src in $(find $HOME/.dotfiles/locals -type f); do
     cp $src $dst
   fi
 done
+
+# Install powerline-status, and make symlink manually
+# NOTE: symlink won't be created in `editable` install
+pip3 install --user --editable=$HOME/.powerline-install \
+  && ln -s $HOME/.powerline-install/scripts/powerline $HOME/.local/bin
+
