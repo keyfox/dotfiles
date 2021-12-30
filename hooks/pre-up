@@ -1,0 +1,4 @@
+# Pull powerline repository
+cd ~/.dotfiles
+git submodule update --init --recursive
+
