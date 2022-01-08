@@ -17,5 +17,5 @@ done
 # Install powerline-status, and make symlink manually
 # NOTE: symlink won't be created in `editable` install
 pip3 install --user --editable=$HOME/.powerline-install \
-  && ln -s $HOME/.powerline-install/scripts/powerline $HOME/.local/bin
+  && ln -nfs $HOME/.powerline-install/scripts/powerline $HOME/.local/bin
 
