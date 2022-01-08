@@ -11,6 +11,7 @@ Plug 'blueshirts/darcula'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'othree/yajs', { 'for': 'javascript' }
+Plug 'dag/vim-fish'
 call plug#end()
 
 augroup TransparentBG
