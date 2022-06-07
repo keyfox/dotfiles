@@ -1,37 +1,174 @@
-" Automated vim-plug installation
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+" ==============================================================================
+"  VIM-PLUG
+" ==============================================================================
+
+" Install vim-plug if not found
+" cf. https://github.com/junegunn/vim-plug/wiki/tips
+if has('unix')
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
+elseif has('win32')
+  " Use PowerShell to install
+  if empty(glob("$HOME/vimfiles/autoload/plug.vim"))
+    silent !powershell -Command "
+      \ iwr -useb
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      \ | ni $HOME/vimfiles/autoload/plug.vim -Force
+      \ "
+  endif
 endif
 
+" Run PlugInstall if there are missing plugins
+" cf. https://github.com/junegunn/vim-plug/wiki/tips
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+" ==== Enumerate plugins here ==================================================
+
 call plug#begin('~/.vim/plugged')
+
+" Famous ones
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'blueshirts/darcula'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'othree/yajs', { 'for': 'javascript' }
-Plug 'dag/vim-fish'
+Plug 'easymotion/vim-easymotion'
+Plug 'vim-jp/vimdoc-ja'
+" That colorscheme
+Plug 'blueshirts/darcula'
+" for EditorConfig support
+Plug 'editorconfig/editorconfig-vim'
+" Let us edit around [ and command
+Plug 'tpope/vim-surround'
+" Show Git's gutters
+Plug 'airblade/vim-gitgutter'
+" File tree
+Plug 'preservim/nerdtree'
+" Repetition - this supports vim-surround
+Plug 'tpope/vim-repeat'
+" Show what to be substituted
+Plug 'markonm/traces.vim'
+" Many languages
+Plug 'sheerun/vim-polyglot'
+
+if executable('node')
+  " Only if node is available
+  " To install, in Ubuntu:
+  "   sudo apt install nodejs npm
+  "   sudo npm install -g n
+  "   sudo n stable
+  "   sudo apt purge nodejs npm
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+endif
+
+if executable('fzf')
+  " Only if fzf is available
+  " To install, in Ubuntu: sudo apt install fzf
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+endif
+
 call plug#end()
 
-augroup TransparentBG
-	autocmd!
-  autocmd ColorScheme * highlight Normal ctermbg=none
- 	autocmd ColorScheme * highlight NonText ctermbg=none
-	autocmd ColorScheme * highlight LineNr ctermbg=none
-	autocmd ColorScheme * highlight Folded ctermbg=none
-	autocmd ColorScheme * highlight EndOfBuffer ctermbg=none
-augroup END
+" ==============================================================================
+"  KEY MAPPINGS
+" ==============================================================================
+
+let mapleader = "\<Space>"
+
+nmap <leader>o <Cmd>NERDTree<CR>
+nmap <leader>w :w<CR>
+
+nmap <leader>f <Plug>(easymotion-bd-f)
+nmap <leader>/ <Plug>(easymotion-bd-f2)
+nmap <leader>: <Plug>(easymotion-bd-jk)
+
+" ==============================================================================
+"  COLORINGS
+" ==============================================================================
 
 set background=dark
-colorscheme darcula
 
-" show information of file being edited in title bar
-set title
+" Transparentize background so that we can see the background image
+" on the terminal
+" This MUST be placed before `colorscheme` command
+augroup TransparentizeBackground
+  if !has("gui_running")
+    " Do nothing when running gvim
+
+    " Clear all the commands in this group if previously loaded
+    autocmd!
+    " When ColorScheme is triggered, whatever the file is, transparentize
+    " backgrounds
+    autocmd ColorScheme * highlight Normal      ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * highlight NonText     ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * highlight LineNr      ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * highlight Folded      ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * highlight EndOfBuffer ctermbg=NONE guibg=NONE
+    " these are for darcula theme
+    autocmd ColorScheme * highlight vimIsCommand ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * highlight vimVar       ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * highlight vimParenSep  ctermbg=NONE guibg=NONE
+  endif
+augroup END
+
+set termguicolors
+
+" Don't pause for the error message of missing colorscheme,
+" especially just before vim-plug installs the desired one
+try
+  colorscheme darcula
+catch /^Vim\%((\a\+)\)\=:E185/
+  " E185 is what you get when specifying non-existent colorscheme
+  " possibly due to the first installation
+  colorscheme torte
+endtry
+
+" ==============================================================================
+"  VIM BEHAVIOURS
+" ==============================================================================
 
 " encoding used inside vim
 set encoding=utf-8
+" encoding used when loading a file
+set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
+" This will create LF line-ended file
+set fileformats=unix,dos,mac
 
+" let me open another file even if I'm editing some file already
+set hidden
+
+set splitright    " open a file on right side when :vs
+set splitbelow    " open a file on bottom side when :sp
+
+" Whatever the file is, just for the file in question,
+"   - Don't start comment line when [o] or [O] is pressed in normal mode (o)
+"   - Don't start comment line when [Enter] is pressed in insert mode (r)
+autocmd FileType * setlocal
+      \ formatoptions-=r
+      \ formatoptions-=o
+      \ formatoptions-=c
+
+set backspace=indent,eol,start
+
+" Automatically reload file when the file is edited externally
+set autoread
+
+" ==============================================================================
+"  APPERANCES
+" ==============================================================================
+
+" Change cursor style depending on vim mode
+let &t_ti.="\e[1 q"
+let &t_SI.="\e[5 q"
+let &t_EI.="\e[1 q"
+let &t_te.="\e[0 q"
+
+" show information about file being edited in title bar
+set title
+" always show statusbar
 set laststatus=2
 
 " show line numbers
@@ -41,6 +178,7 @@ set ruler
 
 " highlight line which cursor is on
 set cursorline
+
 " highlight a pair of parenthesises
 set showmatch
 
@@ -51,18 +189,23 @@ set sidescrolloff=12
 " how many characters will be scrolled at a time
 set sidescroll=8
 
-" allow to show another file editing a file
-set hidden
+" never emit bell sounds nor flash screen
+:set visualbell t_vb=
+
+" ==============================================================================
+"  TEXT SEARCHING
+" ==============================================================================
 
 set incsearch     " start searching on type
 set hlsearch      " highlight matches when searching
 set ignorecase    " case-insensitive search
-set smartcase     " do case-sensitive search once capitalized character has been typed
-
-set splitright    " open a file on right side in :vs
-set splitbelow    " open a file on bottom side in :sp
+set smartcase     " do case-sensitive search only if query has capital letters
 
 set wrapscan      " restart search from the beginning of file if needed
+
+" ==============================================================================
+"  INDENTATION
+" ==============================================================================
 
 set smarttab
 set autoindent
@@ -72,21 +215,27 @@ set smartindent
 set expandtab
 " how many spaces does a tab space contain?
 set tabstop=2
-" how many spaces should be inserted when TAB key pressed?
+" how many spaces should be inserted when TAB key gets pressed?
 set softtabstop=2
 " how many spaces should be inserted when newline inserted?
 set shiftwidth=2
+set shiftround
 
-" never emit bell sounds
-set visualbell t_vb=
+" ==============================================================================
+"  MOUSE SETTINGS
+" ==============================================================================
 
-autocmd FileType * setlocal formatoptions-=c formatoptions -=r formatoptions-=o
-
-set backspace=indent,eol,start
-
-set mouse=a
+set mouse=a  " Use mouse whatever mode is (a stands for ALL)
 set ttymouse=xterm2
 
-python3 from powerline.vim import setup as powerline_setup
-python3 powerline_setup()
-python3 del powerline_setup
+" ==============================================================================
+"  POWERLINE SETTINGS
+" ==============================================================================
+
+try
+  python3 from powerline.vim import setup as powerline_setup
+  python3 powerline_setup()
+  python3 del powerline_setup
+catch /^Vim(python3)/
+  " error occurred inside python3 -- nothing we can do!
+endtry
