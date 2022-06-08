@@ -1,1 +1,1 @@
-eval "`k4x-genalias`"
+eval "`~/.local/bin/k4x-genalias`"
