@@ -143,8 +143,16 @@ fi
 # LOAD EXTERNAL CONFIGURATIONS
 #===============================================================================
 
-# Use `find` instead of iterating by path because .bashrc might not exist
-for f in `find ~/.bashrc.local.d/pre/ -name '*.bashrc'`; do source $f; done
-for f in `find ~/.bashrc.d/ -name '*.bashrc'`; do source $f; done
-for f in `find ~/.bashrc.local.d/post/ -name '*.bashrc'`; do source $f; done
-
+# EVERY ALL CUSTOMIZES GO INTO THOSE DIRECTORIES.
+# Use `local` directories to override with host-specific settings.
+bashrc_dirs=(
+    '~/.bashrc.local.d/pre'
+    '~/.bashrc.d'
+    '~/.bashrc.local.d/post'
+)
+for d in "${bashrc_dirs[@]}" ; do
+  if [ -d $d ]; then
+    for f in `find $d -name '*.bashrc'`; do source $f; done
+  fi
+done
+unset bashrc_dirs
