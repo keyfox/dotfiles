@@ -146,9 +146,9 @@ fi
 # EVERY ALL CUSTOMIZES GO INTO THOSE DIRECTORIES.
 # Use `local` directories to override with host-specific settings.
 bashrc_dirs=(
-    '~/.bashrc.local.d/pre'
-    '~/.bashrc.d'
-    '~/.bashrc.local.d/post'
+    "$HOME/.bashrc.local.d/pre"
+    "$HOME/.bashrc.d"
+    "$HOME/.bashrc.local.d/post"
 )
 for d in "${bashrc_dirs[@]}" ; do
   if [ -d $d ]; then
