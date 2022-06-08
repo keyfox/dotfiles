@@ -1,4 +1,3 @@
 # _copy_only is handled by Keyfox
 EXCLUDES="README.md LICENSE _copy_only"
-SYMLINK_DIRS="bashrc.d"
 
