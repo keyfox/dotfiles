@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+# Generates alias commands based on, especially, availability of commands.
+# The output is supposed to be executed in bash and fish.
+#
+# Example to make `alias foo='foobar'` :
+#   if command_available foobar ; do
+#     echo_alias foo foobar
+#   fi
+#
+# In bash, use the output like:
+#   eval "`./this-script.sh`"
+
+#===============================================================
+# Check if the given command is available
+#
+# Arguments:
+#   $1 - name of command
+# Returns:
+#   0 when command is available, non-zero otherwise
+#===============================================================
+command_available() {
+  command -v $1 &> /dev/null
+  return $?
+}
+
+#===============================================================
+# Print alias to stdout in bash-executable form
+#
+# Arguments:
+#   $1 - name of alias
+#   $2 - command to be actually executed
+# Returns:
+#   None
+#===============================================================
+echo_alias() {
+  echo "alias $1='$2'"
+}
+
+#===============================================================
+# MAIN
+#===============================================================
+
+# Alias `python` and `python3` to the latest available one
+python3_commands=('python3.10' 'python3.9' 'python3.8' 'python3.7')
+for p in "${python3_commands[@]}" ; do
+  if command_available $p ; then
+    echo_alias python $p
+    echo_alias python3 $p
+    break
+  fi
+done
+
+# As well as `pip`
+if command_available pip3 ; then
+  echo_alias pip pip3
+fi
+
+echo_alias editcron 'crontab -e'
+
