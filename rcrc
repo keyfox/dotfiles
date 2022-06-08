@@ -1,4 +1,3 @@
-COPY_ALWAYS="tmux.local.conf"
-EXCLUDES="README.md LICENSE locals"
+EXCLUDES="README.md LICENSE _copy_only"
 SYMLINK_DIRS="bashrc.d"
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-for src in $(find $HOME/.dotfiles/locals -type f); do
-  rel=`realpath --relative-to=$HOME/.dotfiles/locals $src`
+for src in $(find $HOME/.dotfiles/_copy_only -type f); do
+  rel=`realpath --relative-to=$HOME/.dotfiles/_copy_only $src`
   dst=$HOME/$rel
   parent=${dst%/*}
   if [ -f $dst ]; then
