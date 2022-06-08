@@ -115,6 +115,8 @@ augroup TransparentizeBackground
 augroup END
 
 set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 " Don't pause for the error message of missing colorscheme,
 " especially just before vim-plug installs the desired one
