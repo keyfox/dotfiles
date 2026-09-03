@@ -8,5 +8,10 @@ if status is-interactive
 
     # add PATH
     fish_add_path ~/.local/bin
+
+    # add alias for NVIM if available
+    if type -q nvim
+	alias vim='nvim'
+    end
 end
 
