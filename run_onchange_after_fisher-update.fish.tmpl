@@ -1,0 +1,13 @@
+#!/usr/bin/env fish
+# Run `fisher update` when fish_plugins changes.
+# fish_plugins hash: {{ include "private_dot_config/private_fish/fish_plugins" | sha256sum }}
+
+if not functions -q fisher
+    echo "fisher is not installed; skipping fisher update" >&2
+    exit 0
+end
+
+if not fisher update
+    echo "fisher update failed; run `fisher update` manually after fixing the problem" >&2
+    exit 1
+end
