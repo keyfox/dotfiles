@@ -6,6 +6,8 @@ if status is-interactive; and test -t 1
         set bg '#0d1a2a'
     else if test (prompt_hostname) = revon
         set bg '#3a0d0d'
+    else if test (prompt_hostname) = pinata
+        set bg '#102a0d'
     end
 
     if test -n "$bg"
