@@ -54,7 +54,27 @@ if status is-interactive
 
     # add alias for NVIM if available
     if type -q nvim
-	alias vim='nvim'
+        alias vim='nvim'
     end
+
+    # use bat for cat if available (use `command cat` for the original)
+    if type -q batcat
+        alias cat='batcat'
+    end
+
+    if type -q lsd
+        alias ls='lsd'
+    end
+end
+
+# Volta (Node.js version manager), only where installed
+if test -d ~/.volta
+    set -gx VOLTA_HOME ~/.volta
+    fish_add_path $VOLTA_HOME/bin
+end
+
+# opencode, only where installed
+if test -d ~/.opencode/bin
+    fish_add_path ~/.opencode/bin
 end
 
